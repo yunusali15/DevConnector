@@ -1,7 +1,9 @@
 import React, { Fragment, useState } from 'react'
-import { Link } from 'react-router-dom'
+import { Link, Navigate } from 'react-router-dom'
 import { connect } from 'react-redux';
 import setAlert from '../../actions/alert';
+import { register } from '../../actions/auth';
+import PropTypes from 'prop-types';
 
 
 const Register = (props) => {
@@ -16,6 +18,8 @@ const Register = (props) => {
   const { name, email, password, password2 } = formData;
 
   const onChange = e => setFormData({ ...formData, [e.target.name]: e.target.value });
+
+  
 
   const onSubmit = async (e) => {
     e.preventDefault();
@@ -46,10 +50,13 @@ const Register = (props) => {
       } catch (err) {
         console.error(err);
       }*/
-      console.log('Successful Registration');
+      props.register({name, email, password}) 
     }
   }
 
+  if(props.isAuthenticated) {
+    return <Navigate push to="/Dashboard"/>
+  }
 
   return (
     <Fragment>
@@ -89,11 +96,21 @@ const Register = (props) => {
           <input type="submit" className="btn btn-primary" value="Register" />
         </form>
         <p className="my-1">
-          Already have an account? <a href="/Login">Sign In</a>
+          Already have an account? <Link to="/Login">Sign In</Link>
         </p>
       </section>
     </Fragment>
   )
 }
 
-export default connect(null ,{ setAlert })(Register);
+Register.propTypes = {
+  setAlert : PropTypes.func.isRequired,
+  register: PropTypes.func.isRequired,
+  isAuthenticated: PropTypes.bool.isRequired,
+};
+
+const mapStateToProps = state => ({
+  isAuthenticated : state.auth.isAuthenticated
+})
+
+export default connect(mapStateToProps ,{ setAlert, register })(Register);
