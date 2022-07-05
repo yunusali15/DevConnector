@@ -54,7 +54,7 @@ router.post('/', [
             
             const payload = {
                 user: {
-                    id: user.id
+                    id: user.id             //the user id is automatically passed to any endpoint by passing in the jwt 
                 }
             };
 

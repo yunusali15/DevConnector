@@ -55,7 +55,7 @@ const Register = (props) => {
   }
 
   if(props.isAuthenticated) {
-    return <Navigate push to="/Dashboard"/>
+    return <Navigate push to="/dashboard"/>
   }
 
   return (
@@ -96,7 +96,7 @@ const Register = (props) => {
           <input type="submit" className="btn btn-primary" value="Register" />
         </form>
         <p className="my-1">
-          Already have an account? <Link to="/Login">Sign In</Link>
+          Already have an account? <Link to="/login">Sign In</Link>
         </p>
       </section>
     </Fragment>
