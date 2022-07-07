@@ -15,6 +15,9 @@ import Alert from './components/layout/Alert';
 import Dashboard from './components/layout/Dashboard';
 import ProtectedRoute from './components/auth/ProtectedRoute';
 import CreateProfile from './components/profile-forms/CreateProfile';
+import EditProfile from './components/profile-forms/EditProfile';
+import AddEducation from './components/profile-forms/AddEducation';
+import AddExperience from './components/profile-forms/AddExperience';
 
 //Routes replaced Switch in react-router-dom v6
 
@@ -44,6 +47,9 @@ const App = () => {
             <Route element={<ProtectedRoute />}>
               <Route exact path="dashboard" element={<Dashboard />} />
               <Route exact path="create-profile" element={<CreateProfile/>} />
+              <Route exact path="edit-profile" element={<EditProfile/>} />
+              <Route exact path="add-education" element={<AddEducation/>} />
+              <Route exact path="add-Experience" element={<AddExperience/>} /> 
             </Route>
           </Routes>
           </section>
