@@ -27,17 +27,6 @@ const Profiles = ({
                <div className="profiles">
                   {profiles.length > 0 ? (
                      profiles.map((profile) => (
-                        //    if (user != null && user._id === profile.user._id) {
-                        //       return <Fragment></Fragment>;
-                        //    } else {
-                        //       return (
-                        //          <ProfileItem
-                        //             profile={profile}
-                        //             key={profile._id}
-                        //          />
-                        //       );
-                        //    }
-                        // })
                         <ProfileItem profile={profile} key={profile._id} />
                      ))
                   ) : (
