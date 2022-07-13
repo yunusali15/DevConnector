@@ -39,47 +39,42 @@ const App = () => {
          <Router>
             <Fragment>
                <Navbar />
+               {/* <Routes>
+                  <Route exact path="/" element={<Landing />} />
+               </Routes> */}
+               <Alert />
                <Routes>
                   <Route exact path="/" element={<Landing />} />
+                  <Route exact path="register" element={<Register />} />
+                  <Route exact path="login" element={<Login />} />
+                  <Route exact path="profiles" element={<Profiles />} />
+                  <Route element={<ProtectedRoute />}>
+                     <Route exact path="dashboard" element={<Dashboard />} />
+                     <Route
+                        exact
+                        path="create-profile"
+                        element={<CreateProfile />}
+                     />
+                     <Route
+                        exact
+                        path="edit-profile"
+                        element={<EditProfile />}
+                     />
+                     <Route
+                        exact
+                        path="add-education"
+                        element={<AddEducation />}
+                     />
+                     <Route
+                        exact
+                        path="add-Experience"
+                        element={<AddExperience />}
+                     />
+                     <Route exact path="profiles/:id" element={<Profile />} />
+                     <Route exact path="posts" element={<Posts />} />
+                     <Route path="posts/:id" element={<PostItem />} />
+                  </Route>
                </Routes>
-               <section className="container">
-                  <Alert />
-                  <Routes>
-                     <Route exact path="register" element={<Register />} />
-                     <Route exact path="login" element={<Login />} />
-                     <Route exact path="profiles" element={<Profiles />} />
-                     <Route element={<ProtectedRoute />}>
-                        <Route exact path="dashboard" element={<Dashboard />} />
-                        <Route
-                           exact
-                           path="create-profile"
-                           element={<CreateProfile />}
-                        />
-                        <Route
-                           exact
-                           path="edit-profile"
-                           element={<EditProfile />}
-                        />
-                        <Route
-                           exact
-                           path="add-education"
-                           element={<AddEducation />}
-                        />
-                        <Route
-                           exact
-                           path="add-Experience"
-                           element={<AddExperience />}
-                        />
-                        <Route
-                           exact
-                           path="profiles/:id"
-                           element={<Profile />}
-                        />
-                        <Route exact path={`posts`} element={<Posts />} />
-                        <Route path="posts/:id" element={<PostItem />} />
-                     </Route>
-                  </Routes>
-               </section>
             </Fragment>
          </Router>
       </Provider>
