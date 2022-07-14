@@ -52,7 +52,7 @@ const Register = (props) => {
    };
 
    if (props.isAuthenticated) {
-      return <Navigate push to="dashboard" />;
+      return <Navigate push to="/create-profile" />;
    }
 
    return (

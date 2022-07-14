@@ -57,6 +57,7 @@ export const createPost = (formData) => async (dispatch) => {
 
       const res = await axios.post("/api/posts", body, config);
       dispatch({ type: CREATE_POST, payload: res.data });
+      dispatch(setAlert("Post Created", "success"));
    } catch (err) {
       const errors = err.response.data.errors;
 
@@ -79,6 +80,7 @@ export const deletePost = (postId) => async (dispatch) => {
    try {
       const res = await axios.delete(`/api/posts/${postId}`);
       dispatch({ type: DELETE_POST, payload: { postId } });
+      dispatch(setAlert("Post Deleted", "success"));
    } catch (err) {
       dispatch({
          type: POST_ERROR,
@@ -110,6 +112,7 @@ export const createComment = (data, postId) => async (dispatch) => {
          type: CREATE_COMMENT,
          payload: { postId, post: res.data },
       });
+      dispatch(setAlert("Comment Created", "success"));
    } catch (err) {
       const errors = err.response.data.errors;
 
@@ -137,7 +140,7 @@ export const deleteComment = (postId, commentId) => async (dispatch) => {
          type: DELETE_COMMENT,
          payload: { postId, comments: res.data },
       });
-      dispatch(getPostById(postId));
+      dispatch(setAlert("Comment Deleted", "success"));
    } catch (err) {
       dispatch({
          type: POST_ERROR,
@@ -152,7 +155,9 @@ export const deleteComment = (postId, commentId) => async (dispatch) => {
 export const likePost = (postId) => async (dispatch) => {
    try {
       const res = await axios.post(`/api/posts/like/${postId}`);
-      dispatch({ type: LIKE_POST, payload: { postId, likes: res.data } });
+      if (!res.data.msg) {
+         dispatch({ type: LIKE_POST, payload: { postId, likes: res.data } });
+      }
    } catch (err) {
       dispatch({
          type: POST_ERROR,
@@ -167,7 +172,9 @@ export const likePost = (postId) => async (dispatch) => {
 export const unlikePost = (postId) => async (dispatch) => {
    try {
       const res = await axios.delete(`/api/posts/unlike/${postId}`);
-      dispatch({ type: UNLIKE_POST, payload: { postId, likes: res.data } });
+      if (!res.data.msg) {
+         dispatch({ type: UNLIKE_POST, payload: { postId, likes: res.data } });
+      }
    } catch (err) {
       dispatch({
          type: POST_ERROR,
