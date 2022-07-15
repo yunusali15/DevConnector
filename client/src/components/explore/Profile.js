@@ -1,6 +1,6 @@
 import React, { Fragment, useEffect } from "react";
 import PropTypes from "prop-types";
-import { Link, useParams } from "react-router-dom";
+import { Link, useNavigate, useParams } from "react-router-dom";
 import { getRepos, getUserProfile } from "../../actions/profile";
 import { connect } from "react-redux";
 import { Spinner } from "../layout/Spinner";
@@ -17,13 +17,21 @@ const Profile = ({
       getUserProfile(id);
    }, [getUserProfile, id]);
 
+   const navigate = useNavigate();
+
    return (
       <Fragment>
          <section className="container">
             {!loading && profile ? (
                <Fragment>
-                  <Link to="/profiles" className="btn btn-light">
-                     Back To Profiles
+                  <Link to={`/profiles`} className="btn btn-light">
+                     Back to Profiles
+                  </Link>
+                  <Link
+                     to={`/connections/${id}`}
+                     style={{ float: "right" }}
+                     className="btn btn-light">
+                     View Connections
                   </Link>
 
                   <div className="profile-grid my-1">
