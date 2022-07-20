@@ -1,8 +1,13 @@
 const express = require("express");
 const connectDb = require("./config/db");
 const path = require("path");
+const http = require("http");
+const socketio = require("socket.io");
 
 const app = express();
+const server = http.createServer(app);
+
+const io = socketio(server);
 
 connectDb();
 
@@ -13,6 +18,7 @@ app.use("/api/users", require("./routes/api/users")); //matches the url to the r
 app.use("/api/posts", require("./routes/api/posts"));
 app.use("/api/auth", require("./routes/api/auth"));
 app.use("/api/profiles", require("./routes/api/profile"));
+app.use("/api/chats", require("./routes/api/chat"));
 
 //Serve Static in production
 if (process.env.NODE_ENV === "production") {
@@ -25,4 +31,11 @@ if (process.env.NODE_ENV === "production") {
 
 const PORT = process.env.PORT || 5000;
 
-app.listen(PORT, () => console.log(`Server running on ${PORT}`));
+io.on("connection", (socket) => {
+   console.log("New Connection!");
+   socket.on("disconnect", () => {
+      console.log("user disconnected");
+   });
+});
+
+server.listen(PORT, () => console.log(`Server running on ${PORT}`));
