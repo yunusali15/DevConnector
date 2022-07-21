@@ -6,7 +6,8 @@ import { connect } from "react-redux";
 import { Spinner } from "../layout/Spinner";
 import Moment from "react-moment";
 import ProfileGithub from "./ProfileGithub";
-import { getChatByUserId, createChat } from "../../actions/chat";
+import { getChatByUserId, createChat, getChat } from "../../actions/chat";
+import setAlert from "../../actions/alert";
 // import Modal from "@mui/material/Modal";
 
 const Profile = ({
@@ -32,12 +33,14 @@ const Profile = ({
 
    const onChange = (e) => setFormData(e.target.value);
 
-   const handleSubmit = (e) => {
+   const handleSubmit = async (e) => {
       e.preventDefault();
       if (formData) {
-         createChat({ userId: id, text: formData });
-         getChatByUserId(id);
-         navigate("/chat");
+         await createChat({ userId: id, text: formData });
+         setFormData("");
+         setOpenModal(false);
+
+         // navigate("/chat");
       }
    };
 
@@ -55,7 +58,10 @@ const Profile = ({
                      className="btn btn-light">
                      View Connections
                   </Link>
-                  {id !== user._id ? (
+                  {id !== user._id &&
+                  profile.connections.find(
+                     (connection) => connection.user === user._id
+                  ) !== undefined ? (
                      chat === null ? (
                         <button
                            onClick={() => setOpenModal(!openModal)}
@@ -215,7 +221,7 @@ const Profile = ({
                         <ProfileGithub username={profile.githubusername} />
                      )}
                   </div>
-                  <modal
+                  <div
                      className={
                         openModal ? "chat-modal-open" : "chat-modal-close"
                      }>
@@ -232,7 +238,7 @@ const Profile = ({
                            alignSelf: "flex-end",
                            height: "10%",
                         }}>
-                        <i class="fa-solid fa-xmark"></i>
+                        <i className="fa-solid fa-xmark"></i>
                      </button>
                      <h3 className="text-dark">Send a text to start a chat!</h3>
                      <form
@@ -262,7 +268,7 @@ const Profile = ({
                            Send
                         </button>
                      </form>
-                  </modal>
+                  </div>
                </Fragment>
             ) : (
                <Spinner />

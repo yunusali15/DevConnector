@@ -33,7 +33,7 @@ export default function (state = initialState, action) {
       case CREATE_CHAT:
          return {
             ...state,
-            chats: [...state.chats, payload],
+            chat: payload,
          };
       case DELETE_CHAT:
          return {

@@ -2,28 +2,34 @@ import "../../styles.css";
 import React, { Fragment, useEffect, useState } from "react";
 import PropTypes from "prop-types";
 import { connect } from "react-redux";
-import { getChat, getChats, updateChat } from "../../actions/chat";
+import { getChat, getChats, recieveText, updateChat } from "../../actions/chat";
 import Moment from "react-moment";
 import { SET_LOADING } from "../../actions/types";
+import { joinChat, sendText } from "./chatSocket";
+
 const Chat = ({
    chat: { chats, chat, loading },
    auth: { user },
    getChats,
    getChat,
+   recieveText,
    updateChat,
 }) => {
    useEffect(() => {
       getChats();
+      console.log(chat);
+      joinChat(user._id);
    }, [getChats]);
 
    const [text, setText] = useState("");
 
-   const onSend = (e) => {
+   const onSend = async (e) => {
       setText(text.trim());
       e.preventDefault();
       if (text && chat) {
-         updateChat({ chatId: chat._id, text });
+         await updateChat({ chatId: chat._id, text });
          setText("");
+         sendText(chat, user._id);
       }
    };
 
@@ -82,8 +88,10 @@ const Chat = ({
 
    return (
       <Fragment>
-         <section className="container">
-            {!loading && chats.length > 0 ? (
+         <section
+            className="container"
+            style={{ padding: "0", boxShadow: "5px 10px" }}>
+            {!loading && chats && chats.length > 0 ? (
                <div className="chat">
                   <div className="chat__sidebar">
                      {chats.map((chat) => (
@@ -101,7 +109,7 @@ const Chat = ({
                   chat.history[0].sentBy ? (
                      <div className="chat__main">
                         <div className="chat__messages">
-                           {chat.history.slice(0, 15).map((message) => (
+                           {chat.history.map((message) => (
                               <div
                                  key={message._id}
                                  className={`message-${
@@ -148,6 +156,9 @@ const mapStateToProps = (state) => ({
    auth: state.auth,
 });
 
-export default connect(mapStateToProps, { getChats, getChat, updateChat })(
-   Chat
-);
+export default connect(mapStateToProps, {
+   recieveText,
+   getChats,
+   getChat,
+   updateChat,
+})(Chat);

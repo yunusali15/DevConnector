@@ -3,7 +3,7 @@
 * {
    margin: 0;
    padding: 0;
-   box-sizing: border-box;
+   /* box-sizing: border-box; */
 }
 
 html {
@@ -87,14 +87,15 @@ button:disabled {
 
 .chat {
    display: flex;
-   border: dotted 1px #91979d;
+   width: 100%;
+   /* border: dotted 1px #91979d; */
 }
 
 .chat__sidebar {
    height: 80vh;
    color: white;
    background: #343a40;
-   width: 300px;
+   width: 40%;
 }
 
 /* Chat styles */
@@ -102,14 +103,16 @@ button:disabled {
 .chat__main {
    flex-grow: 1;
    display: flex;
+   width: 100%;
    flex-direction: column;
-   max-height: 100vh;
+   max-height: 80vh;
 }
 
 .chat__messages {
    flex-grow: 1;
-   padding: 24px 24px 0 24px;
+   /* padding: 24px 24px 0 24px; */
    display: flex;
+   overflow-y: scroll;
    flex-direction: column-reverse;
 }
 

@@ -72,7 +72,7 @@ export const createChat =
 
          const res = await axios.post(`/api/chats/${userId}`, body, config);
          dispatch({ type: CREATE_CHAT, payload: res.data });
-         //    dispatch(setAlert("Chat Created", "success"));
+         dispatch(setAlert("Chat Created", "success"));
       } catch (err) {
          const errors = err.response.data.errors;
 
@@ -133,6 +133,29 @@ export const updateChat =
                dispatch(setAlert(error.msg, "danger"));
             });
          }
+         dispatch({
+            type: CHAT_ERROR,
+            payload: {
+               status: err.response.status,
+               msg: err.response.statusText,
+            },
+         });
+      }
+   };
+
+export const recieveText =
+   ({ chatId }) =>
+   async (dispatch) => {
+      try {
+         const res = await axios.get(`/api/chats/${chatId}`);
+         console.log("Method Called");
+         dispatch({
+            type: UPDATE_CHAT,
+            payload: { chatId: chatId, data: res.data },
+         });
+         //    dispatch(setAlert("Chat Created", "success"));
+      } catch (err) {
+         const errors = err.response.data.errors;
          dispatch({
             type: CHAT_ERROR,
             payload: {

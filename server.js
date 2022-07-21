@@ -33,8 +33,20 @@ const PORT = process.env.PORT || 5000;
 
 io.on("connection", (socket) => {
    console.log("New Connection!");
+
    socket.on("disconnect", () => {
       console.log("user disconnected");
+   });
+
+   socket.on("register user", function (id) {
+      socket.join(id);
+   });
+
+   socket.on("chatUpdate", ({ chatId, user }) => {
+      socket.in(user).emit("chatUpdate", chatId, function (error, message) {
+         console.log(error);
+         console.log(message);
+      });
    });
 });
 
