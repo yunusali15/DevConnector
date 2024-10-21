@@ -5,12 +5,16 @@ const app = express();
 
 connectDb();
 
-app.use('/api/users', require('./routes/api/users'));
+app.get('/', (req, res) => res.send("App Running"));
+
+//Init Middleware
+app.use(express.json({extended: false}));
+
+app.use('/api/users', require('./routes/api/users')); //matches the url to the resources path that is matched to the '/' request of the folder
 app.use('/api/posts', require('./routes/api/posts'));
 app.use('/api/auth', require('./routes/api/auth'));
 app.use('/api/profile', require('./routes/api/profile'));
 
-app.get('/', (req, res) => res.send("App Running"));
 
 const PORT = process.env.PORT || 5000;
 
