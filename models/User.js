@@ -2,6 +2,7 @@ const mongoose = require('mongoose');
 //mongoose is used to create the schema and the model that will connected to the database to store users  
 
 //analogous to the JEE entity classes and te validation constraints
+//validation functions can also be added by importing the validator module and creating an arrow function
 const userSchema = new mongoose.Schema({ 
     name: {
         type: String,
