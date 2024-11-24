@@ -15,9 +15,15 @@ const Login = ({login, isAuthenticated}) => {
 
   const onChange = e => setFormData({ ...formData, [e.target.name]: e.target.value });
 
+  if(isAuthenticated) {
+    return <Navigate push to="/dashboard"/>
+  }
+  
   const onSubmit = async (e) => {
+    e.preventDefault();
     login(email, password);
 
+    return <Navigate push to="/dashboard"/>
     /*try {
       const config = {
         headers: {
@@ -41,10 +47,6 @@ const Login = ({login, isAuthenticated}) => {
     }*/
   }
 
-  if(isAuthenticated) {
-    return <Navigate push to="/Dashboard"/>
-  }
-
   return (
     <Fragment>
       <section className="container">
@@ -66,7 +68,7 @@ const Login = ({login, isAuthenticated}) => {
           <input type="submit" className="btn btn-primary" value="Log In" />
         </form>
         <p className="my-1">
-          Don't have an account? <Link to="/Register">Sign Up</Link>
+          Don't have an account? <Link to="/register">Sign Up</Link>
         </p>
       </section>
     </Fragment>
