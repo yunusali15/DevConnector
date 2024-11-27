@@ -36,7 +36,7 @@ const CreateProfile = ({createProfile}) => {
 
     const onSubmit = e => {
         e.preventDefault();
-        createProfile(formData,navigate,true);
+        createProfile(formData,navigate, false);
     }
 
     const {
