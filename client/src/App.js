@@ -20,6 +20,8 @@ import AddEducation from "./components/profile-forms/AddEducation";
 import AddExperience from "./components/profile-forms/AddExperience";
 import Profiles from "./components/explore/Profiles";
 import Profile from "./components/explore/Profile";
+import Posts from "./components/explore/Posts";
+import PostItem from "./components/explore/PostItem";
 
 //Routes replaced Switch in react-router-dom v6
 
@@ -70,9 +72,11 @@ const App = () => {
                         />
                         <Route
                            exact
-                           path={`profiles/:id`}
+                           path="profiles/:id"
                            element={<Profile />}
                         />
+                        <Route exact path={`posts`} element={<Posts />} />
+                        <Route path="posts/:id" element={<PostItem />} />
                      </Route>
                   </Routes>
                </section>

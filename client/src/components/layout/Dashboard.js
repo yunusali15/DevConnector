@@ -25,13 +25,13 @@ const Dashboard = ({
 
    const navigate = useNavigate();
 
-   return profile === null && loading ? (
+   return profile === null || loading ? (
       <Spinner />
    ) : (
       <Fragment>
          <h1 className="large text-primary">Dashboard</h1>
          <p className="lead">
-            <i className="fas fa-user"></i> Welcome {user.name}{" "}
+            <i className="fas fa-user"></i> Welcome {profile.user.name}{" "}
          </p>
          {profile != null ? (
             <Fragment>
