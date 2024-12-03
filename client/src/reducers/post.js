@@ -27,12 +27,7 @@ export default function (state = initialState, action) {
       case DELETE_POST:
          return {
             ...state,
-            posts: state.posts.map((post) => {
-               if (post._id === payload.postId) {
-                  return;
-               }
-               return post;
-            }),
+            posts: state.posts.filter((post) => post._id !== payload.postId),
             loading: false,
          };
       case CREATE_POST:

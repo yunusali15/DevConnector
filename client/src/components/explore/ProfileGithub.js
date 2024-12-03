@@ -11,7 +11,7 @@ const ProfileGithub = ({ profile: { repos }, getRepos, username }) => {
    return (
       <Fragment>
          {repos.map((repo) => (
-            <div className="repo bg-white p-1 my-1">
+            <div className="repo bg-white p-1 my-1" key={repo.id}>
                <div>
                   <h4>
                      <a
