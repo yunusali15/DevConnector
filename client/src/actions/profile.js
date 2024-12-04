@@ -8,6 +8,11 @@ import {
    GET_PROFILES,
    CLEAR_PROFILE,
    GET_REPOS,
+   GET_CONNECTIONS,
+   CLEAR_CONNECTION,
+   DELETE_CONNECTION,
+   ADD_CONNECTION,
+   CONNECTION_ERROR,
 } from "./types";
 
 export const getCurrentProfile = () => async (dispatch) => {
@@ -30,7 +35,7 @@ export const getProfiles = () => async (dispatch) => {
       const res = await axios.get("/api/profiles");
       dispatch({ type: GET_PROFILES, payload: res.data });
 
-      dispatch({ type: CLEAR_PROFILE });
+      // dispatch({ type: CLEAR_PROFILE });
    } catch (err) {
       dispatch({
          type: PROFILE_ERROR,
@@ -248,6 +253,81 @@ export const deleteAccount = (navigate) => async (dispatch) => {
          dispatch(setAlert("Account Deleted Sucessfully!", "success"));
          navigate("/");
       }
+   } catch (err) {
+      const errors = err.response.data.errors;
+
+      if (errors) {
+         errors.forEach((error) => {
+            dispatch(setAlert(error.msg, "danger"));
+         });
+      }
+      dispatch({
+         type: PROFILE_ERROR,
+         payload: {
+            status: err.response.status,
+            msg: err.response.statusText,
+         },
+      });
+   }
+};
+
+export const getConnections = (id) => async (dispatch) => {
+   try {
+      const res = await axios.get(`/api/profiles/connections/${id}`);
+      dispatch({ type: GET_CONNECTIONS, payload: res.data });
+      dispatch({ type: CLEAR_CONNECTION });
+   } catch (err) {
+      const errors = err.response.data.errors;
+
+      if (errors) {
+         errors.forEach((error) => {
+            dispatch(setAlert(error.msg, "danger"));
+         });
+      }
+      dispatch({
+         type: PROFILE_ERROR,
+         payload: {
+            status: err.response.status,
+            msg: err.response.statusText,
+         },
+      });
+   }
+};
+
+export const deleteConnection = (userId) => async (dispatch) => {
+   try {
+      const res = await axios.delete(`/api/profiles/connections/${userId}`);
+      dispatch({
+         type: DELETE_CONNECTION,
+         payload: { userId: userId, data: res.data },
+      });
+      dispatch(setAlert("Connection Deleted", "success"));
+   } catch (err) {
+      const errors = err.response.data.errors;
+
+      if (errors) {
+         errors.forEach((error) => {
+            dispatch(setAlert(error.msg, "danger"));
+         });
+      }
+      dispatch({
+         type: PROFILE_ERROR,
+         payload: {
+            status: err.response.status,
+            msg: err.response.statusText,
+         },
+      });
+   }
+};
+
+export const addConnection = (userId) => async (dispatch) => {
+   try {
+      const res = await axios.post(`/api/profiles/connections/${userId}`);
+      dispatch({
+         type: ADD_CONNECTION,
+         payload: { userId: userId, data: res.data },
+      });
+      dispatch(setAlert("Added to Connections", "success"));
    } catch (err) {
       const errors = err.response.data.errors;
 

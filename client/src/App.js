@@ -22,6 +22,7 @@ import Profiles from "./components/explore/Profiles";
 import Profile from "./components/explore/Profile";
 import Posts from "./components/explore/Posts";
 import PostItem from "./components/explore/PostItem";
+import Connections from "./components/explore/Connections";
 
 //Routes replaced Switch in react-router-dom v6
 
@@ -69,6 +70,11 @@ const App = () => {
                         exact
                         path="add-Experience"
                         element={<AddExperience />}
+                     />
+                     <Route
+                        exact
+                        path="connections/:id"
+                        element={<Connections />}
                      />
                      <Route exact path="profiles/:id" element={<Profile />} />
                      <Route exact path="posts" element={<Posts />} />

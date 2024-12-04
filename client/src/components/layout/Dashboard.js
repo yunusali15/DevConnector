@@ -1,4 +1,4 @@
-import React, { Fragment, useEffect } from "react";
+import React, { Fragment, useEffect, useState } from "react";
 import {
    getCurrentProfile,
    deleteEducation,
@@ -10,6 +10,7 @@ import PropTypes from "prop-types";
 import { Spinner } from "./Spinner";
 import { Link, Navigate, useNavigate } from "react-router-dom";
 import Moment from "react-moment";
+import Connections from "../explore/Connections";
 
 const Dashboard = ({
    profile: { loading, profile },
@@ -22,6 +23,8 @@ const Dashboard = ({
    useEffect(() => {
       getCurrentProfile();
    }, []);
+
+   const [showConnections, setShowConnections] = useState(false);
 
    const navigate = useNavigate();
 
@@ -48,112 +51,137 @@ const Dashboard = ({
                      <i className="fas fa-graduation-cap text-primary"></i> Add
                      Education
                   </Link>
-                  {profile.experience.length > 0 ? (
-                     <Fragment>
-                        <h2 className="my-2">Experience Credentials</h2>
-                        <table className="table">
-                           <thead>
-                              <tr>
-                                 <th>Company</th>
-                                 <th className="hide-sm">Title</th>
-                                 <th className="hide-sm">Years</th>
-                                 <th></th>
-                              </tr>
-                           </thead>
-                           <tbody>
-                              {profile.experience.map((exp) => {
-                                 return (
-                                    <tr key={exp._id}>
-                                       <td>{exp.company}</td>
-                                       <td className="hide-sm">{exp.title}</td>
-                                       <td className="hide-sm">
-                                          <Moment format="MMM YYYY">
-                                             {exp.from}
-                                          </Moment>{" "}
-                                          -{" "}
-                                          {exp.to === null ? (
-                                             "Now"
-                                          ) : (
-                                             <Moment format="MMM YYYY">
-                                                {exp.to}
-                                             </Moment>
-                                          )}
-                                       </td>
-                                       <td>
-                                          <button
-                                             className="btn btn-danger"
-                                             onClick={() =>
-                                                deleteExperience(exp._id)
-                                             }>
-                                             Delete
-                                          </button>
-                                       </td>
+                  <button
+                     className="btn btn-light"
+                     type="button"
+                     onClick={() => {
+                        setShowConnections(!showConnections);
+                     }}>
+                     <i className="fa-solid fa-circle-nodes text-primary"></i>{" "}
+                     My Connections{" "}
+                     {showConnections ? (
+                        <i className="fa-solid fa-angle-up"></i>
+                     ) : (
+                        <i className="fa-solid fa-angle-down"></i>
+                     )}
+                  </button>
+                  {!showConnections ? (
+                     <div>
+                        {profile.experience.length > 0 ? (
+                           <Fragment>
+                              <h2 className="my-2">Experience Credentials</h2>
+                              <table className="table">
+                                 <thead>
+                                    <tr>
+                                       <th>Company</th>
+                                       <th className="hide-sm">Title</th>
+                                       <th className="hide-sm">Years</th>
+                                       <th></th>
                                     </tr>
-                                 );
-                              })}
-                           </tbody>
-                        </table>
-                     </Fragment>
-                  ) : (
-                     <Fragment></Fragment>
-                  )}
-                  {profile.education.length > 0 ? (
-                     <Fragment>
-                        <h2 className="my-2">Education Credentials</h2>
-                        <table className="table">
-                           <thead>
-                              <tr>
-                                 <th>School</th>
-                                 <th className="hide-sm">Degree</th>
-                                 <th className="hide-sm">Years</th>
-                                 <th />
-                              </tr>
-                           </thead>
-                           <tbody>
-                              {profile.education.map((edu) => {
-                                 return (
-                                    <tr key={edu._id}>
-                                       <td>{edu.school}</td>
-                                       <td className="hide-sm">{edu.degree}</td>
-                                       <td className="hide-sm">
-                                          <Moment format="MMM YYYY">
-                                             {edu.from}
-                                          </Moment>{" "}
-                                          -{" "}
-                                          {edu.to === null ? (
-                                             "Now"
-                                          ) : (
-                                             <Moment format="MMM YYYY">
-                                                {edu.to}
-                                             </Moment>
-                                          )}
-                                       </td>
-                                       <td>
-                                          <button
-                                             className="btn btn-danger"
-                                             onClick={() =>
-                                                deleteEducation(edu._id)
-                                             }>
-                                             Delete
-                                          </button>
-                                       </td>
+                                 </thead>
+                                 <tbody>
+                                    {profile.experience.map((exp) => {
+                                       return (
+                                          <tr key={exp._id}>
+                                             <td>{exp.company}</td>
+                                             <td className="hide-sm">
+                                                {exp.title}
+                                             </td>
+                                             <td className="hide-sm">
+                                                <Moment format="MMM YYYY">
+                                                   {exp.from}
+                                                </Moment>{" "}
+                                                -{" "}
+                                                {exp.to === null ? (
+                                                   "Now"
+                                                ) : (
+                                                   <Moment format="MMM YYYY">
+                                                      {exp.to}
+                                                   </Moment>
+                                                )}
+                                             </td>
+                                             <td>
+                                                <button
+                                                   className="btn btn-danger"
+                                                   onClick={() =>
+                                                      deleteExperience(exp._id)
+                                                   }>
+                                                   Delete
+                                                </button>
+                                             </td>
+                                          </tr>
+                                       );
+                                    })}
+                                 </tbody>
+                              </table>
+                           </Fragment>
+                        ) : (
+                           <Fragment></Fragment>
+                        )}
+                        {profile.education.length > 0 ? (
+                           <Fragment>
+                              <h2 className="my-2">Education Credentials</h2>
+                              <table className="table">
+                                 <thead>
+                                    <tr>
+                                       <th>School</th>
+                                       <th className="hide-sm">Degree</th>
+                                       <th className="hide-sm">Years</th>
+                                       <th />
                                     </tr>
-                                 );
-                              })}
-                           </tbody>
-                        </table>
-                     </Fragment>
-                  ) : (
-                     <Fragment></Fragment>
-                  )}
+                                 </thead>
+                                 <tbody>
+                                    {profile.education.map((edu) => {
+                                       return (
+                                          <tr key={edu._id}>
+                                             <td>{edu.school}</td>
+                                             <td className="hide-sm">
+                                                {edu.degree}
+                                             </td>
+                                             <td className="hide-sm">
+                                                <Moment format="MMM YYYY">
+                                                   {edu.from}
+                                                </Moment>{" "}
+                                                -{" "}
+                                                {edu.to === null ? (
+                                                   "Now"
+                                                ) : (
+                                                   <Moment format="MMM YYYY">
+                                                      {edu.to}
+                                                   </Moment>
+                                                )}
+                                             </td>
+                                             <td>
+                                                <button
+                                                   className="btn btn-danger"
+                                                   onClick={() =>
+                                                      deleteEducation(edu._id)
+                                                   }>
+                                                   Delete
+                                                </button>
+                                             </td>
+                                          </tr>
+                                       );
+                                    })}
+                                 </tbody>
+                              </table>
+                           </Fragment>
+                        ) : (
+                           <Fragment></Fragment>
+                        )}
 
-                  <div className="my-2">
-                     <button
-                        className="btn btn-danger"
-                        onClick={() => deleteAccount(navigate)}>
-                        <i className="fas fa-user-minus"></i> Delete My Account
-                     </button>
-                  </div>
+                        <div className="my-2">
+                           <button
+                              className="btn btn-danger"
+                              onClick={() => deleteAccount(navigate)}>
+                              <i className="fas fa-user-minus"></i> Delete My
+                              Account
+                           </button>
+                        </div>
+                     </div>
+                  ) : (
+                     <Connections myId={user._id} />
+                  )}
                </Fragment>
             ) : (
                <Fragment>
