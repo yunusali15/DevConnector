@@ -65,7 +65,7 @@ const AddEducation = ({ addEducation }) => {
                   <input
                      type="text"
                      placeholder="Field Of Study"
-                     name="fieldofstudy"
+                     name="fieldOfStudy"
                      value={fieldOfStudy}
                      onChange={(e) => onChange(e)}
                   />

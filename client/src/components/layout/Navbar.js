@@ -9,14 +9,23 @@ const Navbar = ({ auth: { isAuthenticated, loading }, logout }) => {
       <ul>
          <li>
             <Link to="/profiles">
+               <i className="fa-solid fa-user-group"></i>{" "}
                <span className="hide-sm">Developers</span>
             </Link>
          </li>
          <li>
             <Link to="/posts">
+               <i className="fa-solid fa-message"></i>{" "}
                <span className="hide-sm">Posts</span>
             </Link>
          </li>
+         <li>
+            <Link to="/chat">
+               <i className="fa-brands fa-rocketchat"></i>{" "}
+               <span className="hide-sm">My Chats</span>
+            </Link>
+         </li>
+         <li></li>
          <li>
             <Link to="/dashboard">
                <i className="fas fa-profile"></i>

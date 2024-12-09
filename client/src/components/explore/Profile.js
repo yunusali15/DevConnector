@@ -1,4 +1,4 @@
-import React, { Fragment, useEffect } from "react";
+import React, { Fragment, useEffect, useState } from "react";
 import PropTypes from "prop-types";
 import { Link, useNavigate, useParams } from "react-router-dom";
 import { getRepos, getUserProfile } from "../../actions/profile";
@@ -6,18 +6,40 @@ import { connect } from "react-redux";
 import { Spinner } from "../layout/Spinner";
 import Moment from "react-moment";
 import ProfileGithub from "./ProfileGithub";
+import { getChatByUserId, createChat } from "../../actions/chat";
+// import Modal from "@mui/material/Modal";
+
 const Profile = ({
    getUserProfile,
    getRepos,
+   getChatByUserId,
+   createChat,
+   chat: { chat },
    profile: { profile, loading, repos },
+   auth: { user },
 }) => {
    const id = useParams("id").id;
 
    useEffect(() => {
       getUserProfile(id);
+      getChatByUserId(id);
    }, [getUserProfile, id]);
 
    const navigate = useNavigate();
+
+   const [openModal, setOpenModal] = useState(false);
+   const [formData, setFormData] = useState("");
+
+   const onChange = (e) => setFormData(e.target.value);
+
+   const handleSubmit = (e) => {
+      e.preventDefault();
+      if (formData) {
+         createChat({ userId: id, text: formData });
+         getChatByUserId(id);
+         navigate("/chat");
+      }
+   };
 
    return (
       <Fragment>
@@ -33,6 +55,25 @@ const Profile = ({
                      className="btn btn-light">
                      View Connections
                   </Link>
+                  {id !== user._id ? (
+                     chat === null ? (
+                        <button
+                           onClick={() => setOpenModal(!openModal)}
+                           style={{ float: "right" }}
+                           className="btn btn-light">
+                           Send Chat
+                        </button>
+                     ) : (
+                        <Link
+                           to={`/chat`}
+                           style={{ float: "right" }}
+                           className="btn btn-light">
+                           Go to Chat
+                        </Link>
+                     )
+                  ) : (
+                     <></>
+                  )}
 
                   <div className="profile-grid my-1">
                      <div className="profile-top bg-primary p-2">
@@ -46,52 +87,54 @@ const Profile = ({
                            {profile.status} at {profile.company}
                         </p>
                         {profile.location && <p>{profile.location}</p>}
-                        <div className="icons my-1">
-                           <i className="fas fa-globe fa-2x"></i>
-                        </div>
+                        {profile.website && (
+                           <Link to={profile.website} className="icons my-1">
+                              <i
+                                 className="fas fa-globe fa-2x"
+                                 style={{ color: "white" }}></i>
+                           </Link>
+                        )}
+                        {profile.social && profile.social.twitter && (
+                           <Link
+                              to={profile.social.twitter}
+                              className="icons my-1"
+                              rel="noopener noreferrer">
+                              <i className="fab fa-twitter fa-2x"></i>
+                           </Link>
+                        )}
+                        {profile.social && profile.social.facebook && (
+                           <Link
+                              to={profile.social.facebook}
+                              className="icons my-1"
+                              rel="noopener noreferrer">
+                              <i className="fab fa-facebook fa-2x"></i>
+                           </Link>
+                        )}
+                        {profile.social && profile.social.youtube && (
+                           <Link
+                              to={profile.social.youtube}
+                              className="icons my-1"
+                              rel="noopener noreferrer">
+                              <i className="fab fa-youtube fa-2x"></i>
+                           </Link>
+                        )}
+                        {profile.social && profile.social.instagram && (
+                           <Link
+                              to={profile.social.instagram}
+                              className="icons my-1"
+                              rel="noopener noreferrer">
+                              <i className="fab fa-instagram fa-2x"></i>
+                           </Link>
+                        )}
+                        {profile.social && profile.social.linkedin && (
+                           <Link
+                              to={profile.social.linkedin}
+                              className="icons my-1"
+                              rel="noopener noreferrer">
+                              <i className="fab fa-linkedin fa-2x"></i>
+                           </Link>
+                        )}
                      </div>
-                  </div>
-                  <div className="icons my-1">
-                     {profile.website && (
-                        <Link to={profile.website}>
-                           <i className="fas fa-globe fa-2x"></i>
-                        </Link>
-                     )}
-                     {profile.social && profile.social.twitter && (
-                        <Link
-                           to={profile.social.twitter}
-                           rel="noopener noreferrer">
-                           <i className="fab fa-twitter fa-2x"></i>
-                        </Link>
-                     )}
-                     {profile.social && profile.social.facebook && (
-                        <Link
-                           to={profile.social.facebook}
-                           rel="noopener noreferrer">
-                           <i className="fab fa-facebook fa-2x"></i>
-                        </Link>
-                     )}
-                     {profile.social && profile.social.youtube && (
-                        <Link
-                           to={profile.social.youtube}
-                           rel="noopener noreferrer">
-                           <i className="fab fa-youtube fa-2x"></i>
-                        </Link>
-                     )}
-                     {profile.social && profile.social.instagram && (
-                        <Link
-                           to={profile.social.instagram}
-                           rel="noopener noreferrer">
-                           <i className="fab fa-instagram fa-2x"></i>
-                        </Link>
-                     )}
-                     {profile.social && profile.social.linkedin && (
-                        <Link
-                           to={profile.social.linkedin}
-                           rel="noopener noreferrer">
-                           <i className="fab fa-linkedin fa-2x"></i>
-                        </Link>
-                     )}
                   </div>
                   <div className="profile-about bg-light p-2">
                      <h2 className="text-primary">{profile.user.name}'s Bio</h2>
@@ -172,6 +215,54 @@ const Profile = ({
                         <ProfileGithub username={profile.githubusername} />
                      )}
                   </div>
+                  <modal
+                     className={
+                        openModal ? "chat-modal-open" : "chat-modal-close"
+                     }>
+                     <button
+                        onClick={() => {
+                           setOpenModal(!openModal);
+                           setFormData("");
+                        }}
+                        style={{
+                           backgroundColor: "inherit",
+                           color: "#17a2b8",
+                           margin: "10px",
+                           padding: "5px",
+                           alignSelf: "flex-end",
+                           height: "10%",
+                        }}>
+                        <i class="fa-solid fa-xmark"></i>
+                     </button>
+                     <h3 className="text-dark">Send a text to start a chat!</h3>
+                     <form
+                        className="form m-2"
+                        style={{
+                           display: "flex",
+                           flexDirection: "row",
+                           flexWrap: "nowrap",
+                        }}
+                        onSubmit={(e) => handleSubmit(e)}>
+                        <input
+                           name="text"
+                           placeholder="Hello..."
+                           style={{ marginRight: "20px" }}
+                           value={formData}
+                           onChange={(e) => onChange(e)}
+                           required></input>
+                        <button
+                           type="submit"
+                           style={{
+                              float: "right",
+                              padding: "8px",
+                              borderRadius: "10px",
+                              alignItems: "start",
+                           }}
+                           className="my">
+                           Send
+                        </button>
+                     </form>
+                  </modal>
                </Fragment>
             ) : (
                <Spinner />
@@ -183,11 +274,19 @@ const Profile = ({
 
 Profile.prototypes = {
    profile: PropTypes.object.isRequired,
+   chat: PropTypes.object.isRequired,
    getUserProfile: PropTypes.func.isRequired,
+   createChat: PropTypes.func.isRequired,
 };
 
 const mapStateToProps = (state) => ({
    profile: state.profile,
+   chat: state.chat,
+   auth: state.auth,
 });
 
-export default connect(mapStateToProps, { getUserProfile })(Profile);
+export default connect(mapStateToProps, {
+   getUserProfile,
+   getChatByUserId,
+   createChat,
+})(Profile);
