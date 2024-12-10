@@ -23,7 +23,6 @@ import Profile from "./components/explore/Profile";
 import Posts from "./components/explore/Posts";
 import PostItem from "./components/explore/PostItem";
 import Connections from "./components/explore/Connections";
-import io from "socket.io-client";
 import Chat from "./components/explore/Chat";
 
 //Routes replaced Switch in react-router-dom v6
@@ -35,7 +34,6 @@ if (localStorage.token) {
 const App = () => {
    useEffect(() => {
       store.dispatch(loadUser());
-      const socket = io();
    }, []);
 
    return (
