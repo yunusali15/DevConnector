@@ -8,6 +8,7 @@
       "@testing-library/user-event": "^13.5.0",
       "axios": "^1.6.2",
       "moment": "^2.29.4",
+      "mongoose": "^8.0.3",
       "react": "^18.1.0",
       "react-dom": "^18.1.0",
       "react-moment": "^1.1.2",
